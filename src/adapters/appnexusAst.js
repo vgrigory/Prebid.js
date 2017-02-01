@@ -39,7 +39,7 @@ function AppnexusAstAdapter() {
         tag.uuid = bid.bidId;
         if(bid.params.placementId) {
           tag.id = parseInt(bid.params.placementId, 10);
-        } else { 
+        } else {
           tag.code = bid.params.invCode;
         }
         tag.allow_smaller_sizes = bid.params.allowSmallerSizes || false;
@@ -239,6 +239,12 @@ function AppnexusAstAdapter() {
         bid.width = ad.rtb.video.player_width;
         bid.height = ad.rtb.video.player_height;
         bid.vastUrl = ad.rtb.video.asset_url;
+        if(ad.renderer_url) {
+          bid.rendererUrl = ad.renderer_url;
+          bid.rendererId = ad.renderer_id;
+          //store a copy for the renderer.
+          bid.adResponse = tag;
+        }
       } else {
         bid.width = ad.rtb.banner.width;
         bid.height = ad.rtb.banner.height;

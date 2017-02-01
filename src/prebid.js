@@ -245,11 +245,11 @@ $$PREBID_GLOBAL$$.setTargetingForGPTAsync = function () {
 
   //first reset any old targeting
   targeting.resetPresetTargeting();
-  
+
   //now set new targeting keys
   targeting.setTargeting(targeting.getAllTargeting());
-  
-  //emit event 
+
+  //emit event
   events.emit(SET_TARGETING);
 };
 
@@ -261,8 +261,8 @@ $$PREBID_GLOBAL$$.setTargetingForAst = function() {
   }
 
   targeting.setTargetingForAst();
-  
-  //emit event 
+
+  //emit event
   events.emit(SET_TARGETING);
 };
 
@@ -301,7 +301,8 @@ $$PREBID_GLOBAL$$.renderAd = function (doc, id) {
         var ad = adObject.ad;
 
         if (doc===document || adObject.mediaType === 'video') {
-          utils.logError('Error trying to write ad. Ad render call ad id ' + id + ' was prevented from writing to the main document.');
+          //utils.logError('Error trying to write ad. Ad render call ad id ' + id + ' was prevented from writing to the main document.');
+          performRenderViaRenderer(doc, adObject);
         } else if (ad) {
           doc.write(ad);
           doc.close();
@@ -326,6 +327,23 @@ $$PREBID_GLOBAL$$.renderAd = function (doc, id) {
   }
 
 };
+
+function performRenderViaRenderer(doc, adObject) {
+  //"{"tagId":9870122,"sizes":[[728,90],[970,250],[984,120]],"targetId":"1","member":3535,"utCalled":true,"showTagCalled":true,"displayed":false,"uuid":"355ee0cb-856c-4fd2-b68c-fbfa42f80d7a","tagNumber":0,"curWindow":null,"adResponse":null}"
+  var currentTag = {
+    targetId : '123',
+    adResponse : adObject.adResponse
+  };
+  //load the ad
+  //invoke renderer.
+  var callback = function() {
+    console.log('callback');
+  };
+  window.apntag = { debug : true};
+  window.appnexusRenderer.renderAd(currentTag, callback);
+
+
+}
 
 /**
  * Remove adUnit from the $$PREBID_GLOBAL$$ configuration
