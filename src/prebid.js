@@ -330,20 +330,54 @@ $$PREBID_GLOBAL$$.renderAd = function (doc, id) {
 
 function performRenderViaRenderer(doc, adObject) {
   //"{"tagId":9870122,"sizes":[[728,90],[970,250],[984,120]],"targetId":"1","member":3535,"utCalled":true,"showTagCalled":true,"displayed":false,"uuid":"355ee0cb-856c-4fd2-b68c-fbfa42f80d7a","tagNumber":0,"curWindow":null,"adResponse":null}"
-  var currentTag = {
-    targetId : '123',
-    adResponse : adObject.adResponse
+  window.apntag = { debug : true};
+  window.apntag.registerRenderer = function(id, cb) {
+    console.log('inside callback');
+    console.log(id);
+    console.log(cb);
+
+    $$PREBID_GLOBAL$$.renderOutstream(cb.renderAd, adObject);
+  };
+
+  adloader.loadScript('http://cdn.adnxs.com/renderer/video/ANOutstreamVideo.js');
+
+}
+
+$$PREBID_GLOBAL$$.renderOutstream = function(renderFn, adObject) {
+  var firstAd = adObject.adResponse.ads[0];
+  adObject.adResponse.ad = firstAd;
+  var video = adObject.adResponse.ad.rtb.video;
+  adObject.adResponse.ad.video = video;
+  var currentTag =
+  {
+	"tagId": 9870122,
+	"sizes": [
+		[728, 90],
+		[970, 250],
+		[984, 120]
+	],
+	"targetId": "123",
+	"member": 3535,
+	"safeframe": {
+		"expansionByPush": false,
+		"expansionByOverlay": true,
+		"readCookie": false,
+		"writeCookie": false
+	},
+	"utCalled": true,
+	"showTagCalled": true,
+	"displayed": false,
+	"uuid": "bc583538-961d-4878-9a2d-6560a52d24a0",
+	"tagNumber": 0,
+  adResponse : adObject.adResponse
   };
   //load the ad
   //invoke renderer.
   var callback = function() {
     console.log('callback');
   };
-  window.apntag = { debug : true};
-  window.appnexusRenderer.renderAd(currentTag, callback);
-
-
-}
+  renderFn(currentTag, callback);
+};
 
 /**
  * Remove adUnit from the $$PREBID_GLOBAL$$ configuration
