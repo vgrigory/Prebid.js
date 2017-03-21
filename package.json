@@ -17,7 +17,8 @@
     "prebid"
   ],
   "globalVarName": "pbjs",
-  "analytics": [],
+  "analytics": ["ga"],
+  "renderers": ["appnexusOutstream"],
   "author": "the prebid.js contributors",
   "license": "Apache-2.0",
   "devDependencies": {
