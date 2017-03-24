@@ -112,5 +112,5 @@ exports.trackPixel = function(pixelUrl) {
     'rnd=' +
     Math.floor(Math.random() * 1e7);
   new Image().src = trackingPixel;
-  return trackingPixel;
+  return    trackingPixel;
 };
