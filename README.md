@@ -178,7 +178,7 @@ Detailed code coverage reporting can be generated explicitly with
 
         $ gulp test --coverage
 
-The results will be in
+The results will be in:
 
         ./build/coverage
 
